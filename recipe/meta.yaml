@@ -12,7 +12,7 @@ source:
   sha256: 440164c850d5a1575fcbfe95ab884088d03c0449570d40f465611932ffd0bf80
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
 
 requirements:
@@ -22,16 +22,16 @@ requirements:
     - automake
     - pkg-config
     - gmp >=5.0.1,<7
-    - mpfr 3.*
-    - ntl
+    - mpfr 4.*
+    - ntl 10.*
     - libflint
     - cddlib
     - readline 6.2*
     - sed
   run:
     - gmp >=5.0.1,<7
-    - mpfr 3.*
-    - ntl
+    - mpfr 4.*
+    - ntl 10.*
     - libflint
     - cddlib
     - readline 6.2*
@@ -55,3 +55,4 @@ about:
 extra:
   recipe-maintainers:
     - isuruf
+    - saraedum
