@@ -12,29 +12,32 @@ source:
   sha256: 440164c850d5a1575fcbfe95ab884088d03c0449570d40f465611932ffd0bf80
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win]
+  run_exports:
+    - {{ pin_subpackage('singular', max_pin='x.x.x.x') }}
 
 requirements:
   build:
-    - toolchain
+    - {{ compiler('cxx') }}
     - libtool
     - automake
     - pkg-config
-    - gmp >=5.0.1,<7
-    - mpfr 4.*
-    - ntl 10.*
+  host:
+    - gmp
+    - mpfr
+    - ntl
     - libflint
     - cddlib
-    - readline 6.2*
+    - readline
     - sed
   run:
-    - gmp >=5.0.1,<7
-    - mpfr 4.*
-    - ntl 10.*
+    - gmp
+    - mpfr
+    - ntl
     - libflint
     - cddlib
-    - readline 6.2*
+    - readline
 
 test:
   commands:
