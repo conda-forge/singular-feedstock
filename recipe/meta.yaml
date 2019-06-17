@@ -9,7 +9,7 @@ package:
 source:
   fn: {{ name }}-{{ version }}{{ patchlevel }}.tar.gz
   url: http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/{{ version.replace('.', '-') }}/singular-{{ version }}{{ patchlevel }}.tar.gz
-  sha256: 551b41060c06878e60119f0283edd09ca7a34d47755fe67d04f5cf9bea4a12e440164c850d5a1575f4bfe95ab884088d03c0449570d40f465611932ffd0bf803
+  sha256: 551b41060c06878e60119f0283edd09ca7a34d47755fe67d04f5cf9bea4a12e3
 
 build:
   number: 0
