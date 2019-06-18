@@ -1,5 +1,5 @@
-{% set version = "4.1.1" %}
-{% set patchlevel = "p3" %}
+{% set version = "4.1.2" %}
+{% set patchlevel = "p1" %}
 {% set name = "singular" %}
 
 package:
@@ -9,7 +9,7 @@ package:
 source:
   fn: {{ name }}-{{ version }}{{ patchlevel }}.tar.gz
   url: http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/{{ version.replace('.', '-') }}/singular-{{ version }}{{ patchlevel }}.tar.gz
-  sha256: 551b41060c06878e60119f0283edd09ca7a34d47755fe67d04f5cf9bea4a12e3
+  sha256: b520809ce061059081a973d4a3b102b05863d49c20565d03f638ba5146296d4f
 
 build:
   number: 0
