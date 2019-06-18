@@ -13,7 +13,7 @@ gmp:
 mpfr:
 - '4'
 ntl:
-- 11.3.1
+- 11.3.2
 pin_run_as_build:
   gmp:
     max_pin: x
