@@ -23,6 +23,7 @@ requirements:
     - libtool
     - automake
     - pkg-config
+    - make
   host:
     - gmp
     - mpfr
