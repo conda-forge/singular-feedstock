@@ -51,7 +51,7 @@ test:
 
 about:
   home: https://www.singular.uni-kl.de/
-  license: GPLv2+
+  license: GPL-2.0-or-later
   license_file: COPYING
   summary: | 
     Singular is a computer algebra system for polynomial computations, with special emphasis
