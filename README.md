@@ -3,7 +3,7 @@ About singular
 
 Home: https://www.singular.uni-kl.de/
 
-Package license: GPLv2+
+Package license: GPL-2.0-or-later
 
 Feedstock license: BSD 3-Clause
 
@@ -28,7 +28,7 @@ Current build status
     <td>Drone</td>
     <td>
       <a href="https://cloud.drone.io/conda-forge/singular-feedstock">
-        <img alt="linux" src="https://img.shields.io/drone/build/conda-forge/master.svg?label=Linux">
+        <img alt="linux" src="https://img.shields.io/drone/build/conda-forge/singular-feedstock/master.svg?label=Linux">
       </a>
     </td>
   </tr>

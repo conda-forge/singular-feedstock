@@ -10,6 +10,8 @@ docker_image:
 - condaforge/linux-anvil-comp7
 gmp:
 - '6'
+libflint:
+- '2.6'
 mpfr:
 - '4'
 ncurses:
