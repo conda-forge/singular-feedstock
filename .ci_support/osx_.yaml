@@ -7,7 +7,7 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '9'
+- '10'
 gmp:
 - '6'
 libflint:
@@ -19,7 +19,7 @@ macos_min_version:
 mpfr:
 - '4'
 ncurses:
-- '6.1'
+- '6.2'
 ntl:
 - 11.4.3
 pin_run_as_build:

@@ -5,7 +5,7 @@ Home: https://www.singular.uni-kl.de/
 
 Package license: GPL-2.0-or-later
 
-Feedstock license: BSD 3-Clause
+Feedstock license: BSD-3-Clause
 
 Summary: Singular is a computer algebra system for polynomial computations, with special emphasis
 on commutative and non-commutative algebra, algebraic geometry, and singularity theory
