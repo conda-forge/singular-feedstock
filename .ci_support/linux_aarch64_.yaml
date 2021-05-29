@@ -11,17 +11,15 @@ channel_targets:
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '7'
+- '9'
 docker_image:
-- condaforge/linux-anvil-aarch64
+- quay.io/condaforge/linux-anvil-aarch64
 gmp:
 - '6'
-libflint:
-- '2.6'
 mpfr:
 - '4'
 ncurses:
-- '6.1'
+- '6.2'
 ntl:
 - 11.4.3
 pin_run_as_build:
@@ -34,4 +32,6 @@ pin_run_as_build:
   readline:
     max_pin: x
 readline:
-- '8.0'
+- '8'
+target_platform:
+- linux-aarch64
