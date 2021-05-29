@@ -1,4 +1,6 @@
 #!/bin/bash
+# Get an updated config.sub and config.guess
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./build-aux
 
 export CPPFLAGS="-I$PREFIX/include -DDISABLE_COMMENTATOR $CPPFLAGS -UNDEBUG"
 export LDFLAGS="-L$PREFIX/lib $LDFLAGS"
@@ -23,7 +25,9 @@ chmod +x configure
     --disable-doc
 
 make -j${CPU_COUNT}
+if [[ "${CONDA_BUILD_CROSS_COMPILATION}" != "1" ]]; then
 make check
+fi
 make install
 
 # Fix all Singular includes to work from PREFIX/include
