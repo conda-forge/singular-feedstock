@@ -1,0 +1,33 @@
+MACOSX_DEPLOYMENT_TARGET:
+- '11.0'
+channel_sources:
+- conda-forge/label/rust_dev,conda-forge
+channel_targets:
+- conda-forge main
+cxx_compiler:
+- clangxx
+cxx_compiler_version:
+- '11'
+gmp:
+- '6'
+macos_machine:
+- arm64-apple-darwin20.0.0
+mpfr:
+- '4'
+ncurses:
+- '6.2'
+ntl:
+- 11.4.3
+pin_run_as_build:
+  gmp:
+    max_pin: x
+  mpfr:
+    max_pin: x
+  ncurses:
+    max_pin: x.x
+  readline:
+    max_pin: x
+readline:
+- '8'
+target_platform:
+- osx-arm64

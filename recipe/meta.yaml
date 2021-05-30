@@ -19,11 +19,13 @@ build:
 
 requirements:
   build:
+    - gnuconfig  # [unix]
     - {{ compiler('cxx') }}
     - libtool
     - automake
     - pkg-config
     - make
+    - sed
   host:
     - gmp
     - mpfr
@@ -31,7 +33,6 @@ requirements:
     - libflint
     - cddlib
     - readline
-    - sed
     - ncurses
   run:
     - gmp
