@@ -10,6 +10,10 @@ export CXXFLAGS="-O2 -g -fPIC $CXXFLAGS -Wno-deprecated-register -Wno-register"
 
 chmod +x configure
 
+# workaround https://github.com/Singular/Singular/issues/1099
+sed -i.bak 's/256/512/g' Singular/iplib.cc
+sed -i.bak 's/255/511/g' Singular/iplib.cc
+
 ./configure \
     --prefix="$PREFIX" \
     --libdir="$PREFIX/lib" \
