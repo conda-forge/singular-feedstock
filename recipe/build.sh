@@ -29,7 +29,7 @@ sed -i.bak 's/255/511/g' Singular/iplib.cc
     --disable-doc
 
 make -j${CPU_COUNT}
-if [[ "${CONDA_BUILD_CROSS_COMPILATION}" != "1" ]]; then
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
 make check
 fi
 make install
