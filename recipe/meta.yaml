@@ -12,6 +12,7 @@ source:
   sha256: 14d073b252d6b4f3fce02cebed612d6a09e0eba2bd58384d19b53528c628d71b
   patches:
     - ncursesw.patch
+    - offsetof.patch
 
 build:
   number: 2
