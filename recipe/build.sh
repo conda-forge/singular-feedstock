@@ -14,6 +14,11 @@ chmod +x configure
 sed -i.bak 's/256/512/g' Singular/iplib.cc
 sed -i.bak 's/255/511/g' Singular/iplib.cc
 
+# We disable readline support since inconsistent usage of libncurses and
+# libncursesw leads to problems such as
+# https://github.com/conda-forge/sage-feedstock/issues/82.
+# If readline support is really needed here, we could either enable it with
+# static linking or link against libncursesw by patching the configure.ac.
 ./configure \
     --prefix="$PREFIX" \
     --libdir="$PREFIX/lib" \
@@ -23,6 +28,7 @@ sed -i.bak 's/255/511/g' Singular/iplib.cc
     --with-gmp="$PREFIX" \
     --with-flint="$PREFIX" \
     --with-ntl="$PREFIX" \
+    --without-readline \
     --enable-gfanlib \
     --enable-Singular \
     --enable-factory \
