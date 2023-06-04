@@ -7,7 +7,7 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '13'
+- '15'
 gmp:
 - '6'
 libflint:
@@ -16,18 +16,7 @@ macos_machine:
 - x86_64-apple-darwin13.4.0
 mpfr:
 - '4'
-ncurses:
-- '6'
 ntl:
 - 11.4.3
-pin_run_as_build:
-  gmp:
-    max_pin: x
-  mpfr:
-    max_pin: x
-  readline:
-    max_pin: x
-readline:
-- '8'
 target_platform:
 - osx-64
