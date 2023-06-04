@@ -20,7 +20,11 @@ libflint:
 - '2.9'
 mpfr:
 - '4'
+ncurses:
+- '6'
 ntl:
 - 11.4.3
+readline:
+- '8'
 target_platform:
 - linux-aarch64
