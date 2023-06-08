@@ -7,7 +7,7 @@ channel_targets:
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '10'
+- '12'
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
 gmp:
@@ -20,13 +20,6 @@ ncurses:
 - '6'
 ntl:
 - 11.4.3
-pin_run_as_build:
-  gmp:
-    max_pin: x
-  mpfr:
-    max_pin: x
-  readline:
-    max_pin: x
 readline:
 - '8'
 target_platform:

@@ -8,6 +8,9 @@ export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
 export CFLAGS="-O2 -g -fPIC $CFLAGS"
 export CXXFLAGS="-O2 -g -fPIC $CXXFLAGS -Wno-deprecated-register -Wno-register"
 
+# Pick up changes in configure.ac patches
+autoreconf -ivf
+
 chmod +x configure
 
 # workaround https://github.com/Singular/Singular/issues/1099
