@@ -13,9 +13,10 @@ source:
   patches:
     - ncursesw.patch
     - offsetof.patch
+    - flint3.patch
 
 build:
-  number: 2
+  number: 3
   skip: true  # [win]
   run_exports:
     - {{ pin_subpackage('singular', max_pin='x.x.x.x') }}

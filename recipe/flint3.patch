@@ -1,0 +1,398 @@
+From 55b50e35f20cc0edb0e228cef50e54f7689ccbb8 Mon Sep 17 00:00:00 2001
+From: Marc Mezzarobba <marc@mezzarobba.net>
+Date: Tue, 4 Jul 2023 14:13:01 +0200
+Subject: [PATCH] make Singular build with flint3 (#1177)
+
+---
+ factory/FLINTconvert.cc      |   1 +
+ factory/cf_factor.cc         |   4 +
+ factory/cf_map_ext.cc        |   1 +
+ factory/cf_roots.cc          |   1 +
+ factory/facAbsBiFact.cc      |   1 +
+ factory/facFqBivar.cc        |   2 +
+ factory/facMul.cc            |   2 +
+ libpolys/coeffs/flintcf_Q.cc | 145 +++++++++++++++++------------------
+ libpolys/polys/flint_mpoly.h |   1 +
+ libpolys/polys/flintconv.h   |   3 +
+ 10 files changed, 85 insertions(+), 76 deletions(-)
+
+diff --git a/factory/FLINTconvert.cc b/factory/FLINTconvert.cc
+index 60ae46459..37369973a 100644
+--- a/factory/FLINTconvert.cc
++++ b/factory/FLINTconvert.cc
+@@ -53,6 +53,7 @@ extern "C"
+ #include <flint/fmpq_poly.h>
+ #include <flint/nmod_mat.h>
+ #include <flint/fmpz_mat.h>
++#include <flint/fmpz_mod.h>
+ #if ( __FLINT_RELEASE >= 20400)
+ #include <flint/fq.h>
+ #include <flint/fq_poly.h>
+diff --git a/factory/cf_factor.cc b/factory/cf_factor.cc
+index 6b240994b..0e937c5d6 100644
+--- a/factory/cf_factor.cc
++++ b/factory/cf_factor.cc
+@@ -47,6 +47,10 @@
+ #include <flint/nmod_mpoly_factor.h>
+ #include <flint/fmpq_mpoly_factor.h>
+ #include <flint/fq_nmod_mpoly_factor.h>
++#include <flint/nmod_poly_factor.h>
++#include <flint/fmpz_poly_factor.h>
++#include <flint/fmpz_mpoly_factor.h>
++#include <flint/fq_nmod_poly_factor.h>
+ #endif
+ #endif
+ 
+diff --git a/factory/cf_map_ext.cc b/factory/cf_map_ext.cc
+index e735a9a87..2b0388fc9 100644
+--- a/factory/cf_map_ext.cc
++++ b/factory/cf_map_ext.cc
+@@ -30,6 +30,7 @@
+ 
+ #ifdef HAVE_FLINT
+ #include "FLINTconvert.h"
++#include <flint/fq_nmod_poly_factor.h>
+ #endif
+ 
+ // cyclotomoic polys:
+diff --git a/factory/cf_roots.cc b/factory/cf_roots.cc
+index fb627ce60..b57038263 100644
+--- a/factory/cf_roots.cc
++++ b/factory/cf_roots.cc
+@@ -18,6 +18,7 @@
+ 
+ #ifdef HAVE_FLINT
+ #include "FLINTconvert.h"
++#include "flint/nmod_poly_factor.h"
+ #endif
+ 
+ #include "cf_roots.h"
+diff --git a/factory/facAbsBiFact.cc b/factory/facAbsBiFact.cc
+index 32ce09602..717e76ed9 100644
+--- a/factory/facAbsBiFact.cc
++++ b/factory/facAbsBiFact.cc
+@@ -23,6 +23,7 @@
+ #include "cf_algorithm.h"
+ #ifdef HAVE_FLINT
+ #include "FLINTconvert.h"
++#include "flint/nmod_poly_factor.h"
+ #include <flint/fmpz_poly_factor.h>
+ #endif
+ #ifdef HAVE_NTL
+diff --git a/factory/facFqBivar.cc b/factory/facFqBivar.cc
+index f32357cea..7a1127c39 100644
+--- a/factory/facFqBivar.cc
++++ b/factory/facFqBivar.cc
+@@ -43,6 +43,8 @@
+ 
+ #ifdef HAVE_FLINT
+ #include "FLINTconvert.h"
++#include "flint/nmod_poly_factor.h"
++#include "flint/fq_nmod_poly_factor.h"
+ #endif
+ 
+ TIMING_DEFINE_PRINT(fac_fq_uni_factorizer)
+diff --git a/factory/facMul.cc b/factory/facMul.cc
+index 1b734f701..8af7ccf22 100644
+--- a/factory/facMul.cc
++++ b/factory/facMul.cc
+@@ -37,6 +37,8 @@
+ 
+ #ifdef HAVE_FLINT
+ #include "FLINTconvert.h"
++#include "flint/fq_nmod_vec.h"
++#include "flint/fmpz_mod.h"
+ #endif
+ 
+ // univariate polys
+diff --git a/libpolys/coeffs/flintcf_Q.cc b/libpolys/coeffs/flintcf_Q.cc
+index 59a3b1135..2731335b6 100644
+--- a/libpolys/coeffs/flintcf_Q.cc
++++ b/libpolys/coeffs/flintcf_Q.cc
+@@ -11,6 +11,8 @@
+ #ifdef HAVE_FLINT
+ 
+ #include <flint/flint.h>
++#include <flint/fmpz.h>
++#include <flint/fmpq.h>
+ #include <flint/fmpq_poly.h>
+ #include "factory/factory.h"
+ 
+@@ -126,7 +128,11 @@ static number InitMPZ (mpz_t i, const coeffs)
+ {
+   fmpq_poly_ptr res=(fmpq_poly_ptr)omAlloc(sizeof(fmpq_poly_t));
+   fmpq_poly_init(res);
+-  fmpq_poly_set_mpz(res,i);
++  fmpq_poly_fit_length(res, 1);
++  fmpz_set_mpz(res->coeffs, i);
++  fmpz_one(res->den);
++  _fmpq_poly_set_length(res, 1);
++  _fmpq_poly_normalise(res);
+   return (number)res;
+ }
+ static int Size (number n, const coeffs)
+@@ -137,21 +143,14 @@ static long Int (number &n, const coeffs)
+ {
+   if (fmpq_poly_degree((fmpq_poly_ptr)n)==0)
+   {
+-    mpq_t m;
+-    mpq_init(m);
+-    fmpq_poly_get_coeff_mpq(m,(fmpq_poly_ptr)n,0);
+-    mpz_t num,den;
+-    mpz_init(num);
+-    mpz_init(den);
+-    mpq_get_num(num,m);
+-    mpq_get_den(den,m);
+-    long nl=mpz_get_si(num);
+-    if (mpz_cmp_si(num,nl)!=0) nl=0;
+-    long dl=mpz_get_si(den);
+-    if ((dl!=1)||(mpz_cmp_si(den,dl)!=0)) nl=0;
+-    mpz_clear(num);
+-    mpz_clear(den);
+-    mpq_clear(m);
++    fmpq_t m;
++    fmpq_init(m);
++    fmpq_poly_get_coeff_fmpq(m,(fmpq_poly_ptr)n,0);
++    long nl=fmpz_get_si(fmpq_numref(m));
++    if (fmpz_cmp_si(fmpq_numref(m),nl)!=0) nl=0;
++    long dl=fmpz_get_si(fmpq_denref(m));
++    if ((dl!=1)||(fmpz_cmp_si(fmpq_denref(m),dl)!=0)) nl=0;
++    fmpq_clear(m);
+     return nl;
+   }
+   return 0;
+@@ -161,17 +160,16 @@ static void MPZ(mpz_t result, number &n, const coeffs)
+   mpz_init(result);
+   if (fmpq_poly_degree((fmpq_poly_ptr)n)==0)
+   {
+-    mpq_t m;
+-    mpq_init(m);
+-    fmpq_poly_get_coeff_mpq(m,(fmpq_poly_ptr)n,0);
++    fmpq_t m;
++    fmpq_init(m);
++    fmpq_poly_get_coeff_fmpq(m,(fmpq_poly_ptr)n,0);
+     mpz_t den;
+     mpz_init(den);
+-    mpq_get_num(result,m);
+-    mpq_get_den(den,m);
++    fmpq_get_mpz_frac(result,den,m);
+     int dl=(int)mpz_get_si(den);
+     if ((dl!=1)||(mpz_cmp_si(den,(long)dl)!=0)) mpz_set_ui(result,0);
+     mpz_clear(den);
+-    mpq_clear(m);
++    fmpq_clear(m);
+   }
+ }
+ static number Neg(number a, const coeffs)
+@@ -225,36 +223,31 @@ static void WriteShort(number a, const coeffs r)
+   else
+   {
+   StringAppendS("(");
+-  mpq_t m;
+-  mpq_init(m);
+-  mpz_t num,den;
+-  mpz_init(num);
+-  mpz_init(den);
++  fmpq_t m;
++  fmpq_init(m);
+   BOOLEAN need_plus=FALSE;
+   for(int i=fmpq_poly_length((fmpq_poly_ptr)a);i>=0;i--)
+   {
+-    fmpq_poly_get_coeff_mpq(m,(fmpq_poly_ptr)a,i);
+-    mpq_get_num(num,m);
+-    mpq_get_den(den,m);
+-    if (mpz_sgn1(num)!=0)
++    fmpq_poly_get_coeff_fmpq(m,(fmpq_poly_ptr)a,i);
++    if (!fmpq_is_zero(m))
+     {
+-      if (need_plus && (mpz_sgn1(num)>0))
++      if (need_plus && (fmpq_cmp_ui(m,0)>0))
+         StringAppendS("+");
+       need_plus=TRUE;
+-      int l=mpz_sizeinbase(num,10);
+-      l=si_max(l,(int)mpz_sizeinbase(den,10));
++      int l=fmpz_sizeinbase(fmpq_numref(m),10);
++      l=si_max(l,(int)fmpz_sizeinbase(fmpq_denref(m),10));
+       l+=2;
+       char *s=(char*)omAlloc(l);
+-      char *z=mpz_get_str(s,10,num);
++      char *z=fmpz_get_str(s,10,fmpq_numref(m));
+       if ((i==0)
+-      ||(mpz_cmp_si(num,1)!=0)
+-      ||(mpz_cmp_si(den,1)!=0))
++      ||(fmpz_cmp_si(fmpq_numref(m),1)!=0)
++      ||(fmpz_cmp_si(fmpq_denref(m),1)!=0))
+       {
+         StringAppendS(z);
+-        if (mpz_cmp_si(den,1)!=0)
++        if (fmpz_cmp_si(fmpq_denref(m),1)!=0)
+         {
+           StringAppendS("/");
+-          z=mpz_get_str(s,10,den);
++          z=fmpz_get_str(s,10,fmpq_denref(m));
+           StringAppendS(z);
+         }
+         if (i!=0) StringAppendS("*");
+@@ -265,9 +258,7 @@ static void WriteShort(number a, const coeffs r)
+         StringAppend("%s",r->pParameterNames[0]);
+     }
+   }
+-  mpz_clear(den);
+-  mpz_clear(num);
+-  mpq_clear(m);
++  fmpq_clear(m);
+   StringAppendS(")");
+   }
+ }
+@@ -284,14 +275,19 @@ static const char* Read(const char * st, number * a, const coeffs r)
+   {
+     mpz_t z;
+     mpz_init(z);
++    fmpz_t z1;
++    fmpz_init(z1);
+     s=nlEatLong((char *)s, z);
+-    fmpq_poly_set_mpz((fmpq_poly_ptr)(*a),z);
++    fmpz_set_mpz(z1,z);
++    fmpq_poly_set_fmpz((fmpq_poly_ptr)(*a),z1);
+     if (*s == '/')
+     {
+       s++;
+       s=nlEatLong((char *)s, z);
+-      fmpq_poly_scalar_div_mpz((fmpq_poly_ptr)(*a),(fmpq_poly_ptr)(*a),z);
++      fmpz_set_mpz(z1,z);
++      fmpq_poly_scalar_div_fmpz((fmpq_poly_ptr)(*a),(fmpq_poly_ptr)(*a),z1);
+     }
++    fmpz_clear(z1);
+     mpz_clear(z);
+   }
+   else if(strncmp(s,r->pParameterNames[0],strlen(r->pParameterNames[0]))==0)
+@@ -337,24 +333,17 @@ static BOOLEAN IsMOne (number k, const coeffs)
+ {
+   if (fmpq_poly_length((fmpq_poly_ptr)k)>0) return FALSE;
+   fmpq_poly_canonicalise((fmpq_poly_ptr)k);
+-  mpq_t m;
+-  mpq_init(m);
+-  fmpq_poly_get_coeff_mpq(m,(fmpq_poly_ptr)k,0);
+-  mpz_t num,den;
+-  mpz_init(num);
+-  mpq_get_num(num,m);
++  fmpq_t m;
++  fmpq_init(m);
++  fmpq_poly_get_coeff_fmpq(m,(fmpq_poly_ptr)k,0);
+   BOOLEAN result=TRUE;
+-  if (mpz_cmp_si(num,(long)-1)!=0) result=FALSE;
++  if (fmpz_cmp_si(fmpq_numref(m),(long)-1)!=0) result=FALSE;
+   else
+   {
+-    mpz_init(den);
+-    mpq_get_den(den,m);
+-    int dl=(int)mpz_get_si(den);
+-    if ((dl!=1)||(mpz_cmp_si(den,(long)dl)!=0)) result=FALSE;
+-    mpz_clear(den);
++    int dl=(int)fmpz_get_si(fmpq_denref(m));
++    if ((dl!=1)||(fmpz_cmp_si(fmpq_denref(m),(long)dl)!=0)) result=FALSE;
+   }
+-  mpz_clear(num);
+-  mpq_clear(m);
++  fmpq_clear(m);
+   return (result);
+ }
+ static BOOLEAN GreaterZero (number, const coeffs)
+@@ -469,16 +458,15 @@ static void WriteFd(number a, const ssiInfo *d, const coeffs)
+   fmpq_poly_ptr aa=(fmpq_poly_ptr)a;
+   int l=fmpq_poly_length(aa);
+   fprintf(d->f_write,"%d ",l);
+-  mpq_t m;
+-  mpq_init(m);
++  fmpq_t m;
++  fmpq_init(m);
+   mpz_t num,den;
+   mpz_init(num);
+   mpz_init(den);
+   for(int i=l; i>=0; i--)
+   {
+-    fmpq_poly_get_coeff_mpq(m,(fmpq_poly_ptr)a,i);
+-    mpq_get_num(num,m);
+-    mpq_get_den(den,m);
++    fmpq_poly_get_coeff_fmpq(m,(fmpq_poly_ptr)a,i);
++    fmpq_get_mpz_frac(num,den,m);
+     mpz_out_str (d->f_write,SSI_BASE, num);
+     fputc(' ',d->f_write);
+     mpz_out_str (d->f_write,SSI_BASE, den);
+@@ -486,7 +474,7 @@ static void WriteFd(number a, const ssiInfo *d, const coeffs)
+   }
+   mpz_clear(den);
+   mpz_clear(num);
+-  mpq_clear(m);
++  fmpq_clear(m);
+ }
+ static number ReadFd(const ssiInfo *d, const coeffs)
+ {
+@@ -494,21 +482,26 @@ static number ReadFd(const ssiInfo *d, const coeffs)
+   fmpq_poly_ptr aa=(fmpq_poly_ptr)omAlloc(sizeof(fmpq_poly_t));
+   fmpq_poly_init(aa);
+   int l=s_readint(d->f_read);
+-  mpz_t nm;
+-  mpz_init(nm);
+-  mpq_t m;
+-  mpq_init(m);
++  mpz_t tmp;
++  mpz_init(tmp);
++  fmpq_t m;
++  fmpq_init(m);
++  fmpz_t num,den;
++  fmpz_init(num);
++  fmpz_init(den);
+   for (int i=l;i>=0;i--)
+   {
+-
+-    s_readmpz_base (d->f_read,nm, SSI_BASE);
+-    mpq_set_num(m,nm);
+-    s_readmpz_base (d->f_read,nm, SSI_BASE);
+-    mpq_set_den(m,nm);
+-    fmpq_poly_set_coeff_mpq(aa,i,m);
++    s_readmpz_base (d->f_read,tmp, SSI_BASE);
++    fmpz_set_mpz(num, tmp);
++    s_readmpz_base (d->f_read,tmp, SSI_BASE);
++    fmpz_set_mpz(den, tmp);
++    fmpq_set_fmpz_frac(m,num,den);
++    fmpq_poly_set_coeff_fmpq(aa,i,m);
+   }
+-  mpz_clear(nm);
+-  mpq_clear(m);
++  mpz_clear(tmp);
++  fmpz_clear(den);
++  fmpz_clear(num);
++  fmpq_clear(m);
+   return (number)aa;
+ }
+ // cfClearContent
+diff --git a/libpolys/polys/flint_mpoly.h b/libpolys/polys/flint_mpoly.h
+index 0dd70e431..29ca74569 100644
+--- a/libpolys/polys/flint_mpoly.h
++++ b/libpolys/polys/flint_mpoly.h
+@@ -16,6 +16,7 @@
+ #include <flint/fmpq.h>
+ #include <flint/fmpq_poly.h>
+ #include <flint/fmpq_mpoly.h>
++#include <flint/nmod_mpoly.h>
+ 
+ BOOLEAN convSingRFlintR(fmpq_mpoly_ctx_t ctx, const ring r);
+ void convSingPFlintMP(fmpq_mpoly_t res, fmpq_mpoly_ctx_t ctx, poly p, int lp,const ring r);
+diff --git a/libpolys/polys/flintconv.h b/libpolys/polys/flintconv.h
+index 3ca8f1712..0bf1d26ab 100644
+--- a/libpolys/polys/flintconv.h
++++ b/libpolys/polys/flintconv.h
+@@ -42,6 +42,9 @@
+ #include <flint/fq_nmod.h>
+ #include <flint/fq_nmod_poly.h>
+ #include <flint/fq_nmod_mat.h>
++#include <flint/nmod_poly.h>
++#include <flint/nmod_mat.h>
++#include <flint/fmpz_mat.h>
+ #endif
+ 
+ int convFlintISingI (fmpz_t f);
+-- 
+2.42.0
+
