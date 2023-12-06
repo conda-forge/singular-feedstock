@@ -9,7 +9,7 @@ package:
 source:
   fn: {{ name }}-{{ version }}{{ patchlevel }}.tar.gz
   url: https://www.singular.uni-kl.de/ftp/pub/Math/Singular/SOURCES/{{ version.replace('.', '-') }}/singular-{{ version }}{{ patchlevel }}.tar.gz
-  sha256: 14d073b252d6b4f3fce02cebed612d6a09e0eba2bd58384d19b53528c628d71b
+  sha256: 8f157d2c582614482285838345ed7a3629ad6dd0bfbbc16eed7cbee0ff69d072
   patches:
     - ncursesw.patch
     - offsetof.patch
