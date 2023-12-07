@@ -1,0 +1,4 @@
+# Make Singular available to SageMath 10.2 which relies on an old version of FLINT
+libflint:
+  - 2.9
+  - 3
