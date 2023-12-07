@@ -1,0 +1,26 @@
+cdt_name:
+- cos7
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+cxx_compiler:
+- gxx
+cxx_compiler_version:
+- '12'
+docker_image:
+- quay.io/condaforge/linux-anvil-cos7-x86_64
+gmp:
+- '6'
+libflint:
+- '3'
+mpfr:
+- '4'
+ncurses:
+- '6'
+ntl:
+- 11.4.3
+readline:
+- '8'
+target_platform:
+- linux-ppc64le
