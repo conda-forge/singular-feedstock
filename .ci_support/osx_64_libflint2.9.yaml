@@ -1,5 +1,5 @@
 MACOSX_DEPLOYMENT_TARGET:
-- '11.0'
+- '10.9'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -11,9 +11,9 @@ cxx_compiler_version:
 gmp:
 - '6'
 libflint:
-- '3'
+- '2.9'
 macos_machine:
-- arm64-apple-darwin20.0.0
+- x86_64-apple-darwin13.4.0
 mpfr:
 - '4'
 ncurses:
@@ -23,4 +23,4 @@ ntl:
 readline:
 - '8'
 target_platform:
-- osx-arm64
+- osx-64
