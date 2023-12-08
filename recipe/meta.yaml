@@ -15,7 +15,7 @@ source:
     - offsetof.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
   run_exports:
     - {{ pin_subpackage('singular', max_pin='x.x.x.x') }}
@@ -34,7 +34,7 @@ requirements:
     - gmp
     - mpfr
     - ntl
-    - libflint
+    - libflint {{ libflint }}
     - cddlib
     - readline
     - ncurses
@@ -42,7 +42,6 @@ requirements:
     - gmp
     - mpfr
     - ntl
-    - libflint
     - cddlib
     - readline
     - ncurses
