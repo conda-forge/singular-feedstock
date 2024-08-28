@@ -11,14 +11,14 @@ jobs:
       osx_64_libflint2.9:
         CONFIG: osx_64_libflint2.9
         UPLOAD_PACKAGES: 'True'
-      osx_64_libflint3.0:
-        CONFIG: osx_64_libflint3.0
+      osx_64_libflint3.1:
+        CONFIG: osx_64_libflint3.1
         UPLOAD_PACKAGES: 'True'
       osx_arm64_libflint2.9:
         CONFIG: osx_arm64_libflint2.9
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_libflint3.0:
-        CONFIG: osx_arm64_libflint3.0
+      osx_arm64_libflint3.1:
+        CONFIG: osx_arm64_libflint3.1
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
   variables: {}
