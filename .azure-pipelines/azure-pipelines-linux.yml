@@ -11,27 +11,27 @@ jobs:
       linux_64_libflint2.9:
         CONFIG: linux_64_libflint2.9
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_64_libflint3.0:
-        CONFIG: linux_64_libflint3.0
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_64_libflint3.1:
+        CONFIG: linux_64_libflint3.1
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
       linux_aarch64_libflint2.9:
         CONFIG: linux_aarch64_libflint2.9
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_libflint3.0:
-        CONFIG: linux_aarch64_libflint3.0
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_aarch64_libflint3.1:
+        CONFIG: linux_aarch64_libflint3.1
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
       linux_ppc64le_libflint2.9:
         CONFIG: linux_ppc64le_libflint2.9
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_libflint3.0:
-        CONFIG: linux_ppc64le_libflint3.0
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_ppc64le_libflint3.1:
+        CONFIG: linux_ppc64le_libflint3.1
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
   timeoutInMinutes: 360
   variables: {}
 
