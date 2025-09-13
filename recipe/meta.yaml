@@ -13,6 +13,7 @@ source:
     - ncursesw.patch
     - offsetof.patch
     - fq_nmod_mat_entry.patch
+    - fq_nmod_mat_entry.2.patch
 
 build:
   number: 2
