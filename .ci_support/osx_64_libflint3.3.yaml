@@ -13,11 +13,11 @@ channel_targets:
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '18'
+- '19'
 gmp:
 - '6'
 libflint:
-- '3.2'
+- '3.3'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 mpfr:
@@ -29,6 +29,6 @@ ntl:
 readline:
 - '8'
 singular:
-- 4.4.0
+- 4.4.1
 target_platform:
 - osx-64
