@@ -16,7 +16,7 @@ source:
     - fq_nmod_mat_entry.2.patch
 
 build:
-  number: 2
+  number: 3
   skip: true  # [win]
   run_exports:
     - {{ pin_subpackage('singular', max_pin='x.x.x.x') }}
