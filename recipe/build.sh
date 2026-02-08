@@ -1,5 +1,6 @@
 #!/bin/bash
 # Get an updated config.sub and config.guess
+mkdir -p build-aux
 cp $BUILD_PREFIX/share/gnuconfig/config.* ./build-aux
 
 export CPPFLAGS="-I$PREFIX/include -DDISABLE_COMMENTATOR $CPPFLAGS -UNDEBUG"
