@@ -37,6 +37,7 @@ requirements:
     - pkg-config
     - make
     - sed
+    - texinfo
   host:
     - gmp
     - mpfr
@@ -57,6 +58,7 @@ test:
   commands:
     - test -f ${PREFIX}/include/singular/Singular/libsingular.h
     - test -f ${PREFIX}/lib/libSingular.a
+    - test -f ${PREFIX}/share/info/singular.info
     - test -f ${PREFIX}/lib/libSingular.dylib     # [osx]
     - test -f ${PREFIX}/lib/libSingular.so        # [linux]
 
