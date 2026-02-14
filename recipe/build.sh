@@ -29,8 +29,7 @@ sed -i.bak 's/255/511/g' Singular/iplib.cc
     --with-ntl="$PREFIX" \
     --enable-gfanlib \
     --enable-Singular \
-    --enable-factory \
-    --disable-doc
+    --enable-factory
 
 make -j${CPU_COUNT}
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
@@ -50,4 +49,3 @@ done >"$SRC_DIR/fix_includes.sed"
 # Now execute the script (we add .bak because BSD sed, used also
 # on OS X, requires an argument for -i)
 find singular -name '*.h' -exec sed -i -f "$SRC_DIR/fix_includes.sed" {} \;
-
