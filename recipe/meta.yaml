@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  fn: singular-4.4.1p5.tar.gz
-  url: https://github.com/sagemath/sage-package/releases/download/tars/singular-4.4.1p5.tar.gz
+  fn: {{ name }}-{{ version.replace('.p', 'p') }}.tar.gz
+  url: https://github.com/sagemath/sage-package/releases/download/tars/singular-{{ version.replace('.p', 'p') }}.tar.gz
   sha256: bce5a40bd10b6e9fe991de97e6284f62cdb566c8aef4b2836b4d1307eb7d9edf
   patches:
     - ncursesw.patch
