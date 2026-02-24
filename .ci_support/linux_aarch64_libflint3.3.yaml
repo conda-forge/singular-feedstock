@@ -15,7 +15,7 @@ docker_image:
 gmp:
 - '6'
 libflint:
-- '3.0'
+- '3.3'
 mpfr:
 - '4'
 ncurses:
