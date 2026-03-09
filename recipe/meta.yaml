@@ -6,7 +6,11 @@ package:
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version.replace('.p', 'p') }}.tar.gz
+  # Currently, uni-kl.de is blocking requests from the runners on Azure.
+  # We use a snapshot from GitHub instead. The snapshot is not identical but
+  # the relevant files get recreated anyway by the autoreconf in our build
+  # script.
+  # url: https://www.singular.uni-kl.de/ftp/pub/Math/Singular/SOURCES/{{ version.replace('.', '-') }}/singular-{{ version }}.tar.gz
   url: https://github.com/sagemath/sage-package/releases/download/tars/singular-{{ version.replace('.p', 'p') }}.tar.gz
   sha256: bce5a40bd10b6e9fe991de97e6284f62cdb566c8aef4b2836b4d1307eb7d9edf
   patches:
