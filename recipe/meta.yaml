@@ -18,10 +18,12 @@ source:
     - offsetof.patch
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
   run_exports:
-    - {{ pin_subpackage('singular', max_pin='x.x.x.x') }}
+    # pin_subpackage does not work correctly with the pX syntax, see #37.
+    # - {{ pin_subpackage('singular', max_pin='x.x.x.x') }}
+    - singular =={{ version }}
 
 requirements:
   build:
