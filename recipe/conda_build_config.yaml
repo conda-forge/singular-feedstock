@@ -1,4 +1,3 @@
 # Make Singular available to SageMath 10.2 which relies on an old version of FLINT
 libflint:
-  - 3.3  # version from the conda-forge-pinning-feedstock
-  - 2.9  # this should be removed once SageMath 10.3 has been released
+  - 3.5  # version from the conda-forge-pinning-feedstock
