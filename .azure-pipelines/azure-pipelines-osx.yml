@@ -8,22 +8,16 @@ jobs:
     vmImage: $(VMIMAGE)
   strategy:
     matrix:
-      osx_64_libflint2.9:
-        CONFIG: osx_64_libflint2.9
+      osx_64_:
+        CONFIG: osx_64_
         UPLOAD_PACKAGES: 'True'
         VMIMAGE: macOS-15
-      osx_64_libflint3.3:
-        CONFIG: osx_64_libflint3.3
+        store_build_artifacts: false
+      osx_arm64_:
+        CONFIG: osx_arm64_
         UPLOAD_PACKAGES: 'True'
         VMIMAGE: macOS-15
-      osx_arm64_libflint2.9:
-        CONFIG: osx_arm64_libflint2.9
-        UPLOAD_PACKAGES: 'True'
-        VMIMAGE: macOS-15
-      osx_arm64_libflint3.3:
-        CONFIG: osx_arm64_libflint3.3
-        UPLOAD_PACKAGES: 'True'
-        VMIMAGE: macOS-15
+        store_build_artifacts: false
   timeoutInMinutes: 360
   variables: {}
 
