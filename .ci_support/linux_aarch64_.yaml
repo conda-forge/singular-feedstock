@@ -15,7 +15,7 @@ docker_image:
 gmp:
 - '6'
 libflint:
-- '2.9'
+- '3.5'
 mpfr:
 - '4'
 ncurses:
@@ -27,4 +27,4 @@ readline:
 singular:
 - 4.4.1
 target_platform:
-- linux-64
+- linux-aarch64
