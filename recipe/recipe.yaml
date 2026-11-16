@@ -1,0 +1,82 @@
+schema_version: 1
+
+context:
+  # Singular uses 4.4.1p5 for the 5th patch release of 4.4.1.
+  # The p is considered as a pre-release version but here it's meant as a patch
+  # release version. This confuses pin_subpackage wich renders
+  # upper_bound=x.x.x.x then as >=4.4.1.0p.5,<4.4.1.1a. Also rattler-build
+  # currently gets these version numbers completely wrong. To make things
+  # easier to handle, we switch to an easier scheme in conda-forge and treat
+  # 4.4.1p5 as 4.4.1.5 which better ressembles the intention by upstream.
+  version: 4.4.1.5
+  name: singular
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/Singular/Singular/releases/download/Release-${{ (version | split('.'))[:-1] | join('-') }}p${{ version | split('.') | last }}/singular-${{ (version | split('.'))[:-1] | join('.') }}p${{ version | split('.') | last }}.tar.gz
+  sha256: b2b328fb19e9f4396dca89ed69929b241f52d2d1b1cc605c17745130a6cd4943
+  patches:
+    - ncursesw.patch
+    - offsetof.patch
+
+build:
+  number: 0
+  skip: win
+
+requirements:
+  build:
+    - if: unix
+      then: gnuconfig
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - libtool
+    - automake
+    - autoconf
+    - pkg-config
+    - make
+    - sed
+  host:
+    - gmp
+    - mpfr
+    - ntl
+    - libflint
+    - cddlib
+    - readline
+    - ncurses
+  run:
+    - gmp
+    - mpfr
+    - ntl
+    - cddlib
+    - readline
+    - ncurses
+  run_exports:
+    - ${{ pin_subpackage('singular', upper_bound='x.x.x.x') }}
+
+tests:
+  - script:
+      - test -f ${PREFIX}/include/singular/Singular/libsingular.h
+      - test -f ${PREFIX}/lib/libSingular.a
+      - test -f ${PREFIX}/share/info/singular.info
+      - if: osx
+        then: test -f ${PREFIX}/lib/libSingular.dylib
+      - if: linux
+        then: test -f ${PREFIX}/lib/libSingular.so
+
+about:
+  license: GPL-2.0-or-later
+  license_file: COPYING
+  summary: |
+    Singular is a computer algebra system for polynomial computations, with special emphasis
+    on commutative and non-commutative algebra, algebraic geometry, and singularity theory
+  homepage: https://www.singular.uni-kl.de/
+  repository: https://github.com/Singular/Sources
+
+extra:
+  recipe-maintainers:
+    - isuruf
+    - saraedum
+
