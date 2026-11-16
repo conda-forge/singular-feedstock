@@ -35,7 +35,7 @@ requirements:
     - libtool
     - automake
     - autoconf
-    - pkg-config
+    - pkgconf
     - make
     - sed
   host:
