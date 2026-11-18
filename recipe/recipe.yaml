@@ -21,6 +21,9 @@ source:
   patches:
     - ncursesw.patch
     - offsetof.patch
+    # Upstream's doc target 'all' also builds DVI files which requires TeX.
+    # We only need the info & HTML docs that upstream ships in doc.tbz2.
+    - docbuild.patch
 
 build:
   number: 0
@@ -38,6 +41,9 @@ requirements:
     - pkgconf
     - make
     - sed
+    - texinfo
+    - perl
+    - bzip2
   host:
     - gmp
     - mpfr

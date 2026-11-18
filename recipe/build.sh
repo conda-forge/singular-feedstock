@@ -29,12 +29,17 @@ sed -i.bak 's/255/511/g' Singular/iplib.cc
     --with-ntl="$PREFIX" \
     --enable-gfanlib \
     --enable-Singular \
+    --enable-doc-build \
     --enable-factory
 
 make -j${CPU_COUNT}
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
 make check
 fi
+
+# The install-data-local rule only installs singular.info from doc/doc.tbz2, so
+# we have to create it.
+make -C doc doc.tbz2
 make install
 
 # Fix all Singular includes to work from PREFIX/include

@@ -1,0 +1,11 @@
+--- a/doc/Makefile.am	2026-11-18 19:27:24.044765336 +0000
++++ b/doc/Makefile.am	2026-11-18 19:27:24.099000000 +0000
+@@ -177,7 +177,7 @@
+ 	/bin/rm -f plural.tex letterplace.tex plulibs.tex sca.tex pyobject.tex
+ 
+ all-local:
+-	$(MAKE) -j1 -f Makefile-docbuild all
++	$(MAKE) -j1 -f Makefile-docbuild info html singular.idx
+ 
+ singular.info:
+ 	$(MAKE) -j1 -f Makefile-docbuild $@
